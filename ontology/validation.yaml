@@ -1,0 +1,69 @@
+# Validation Suite for Axioms
+
+**Date:** 2025-11-13
+**Purpose:** Define validation rules to ensure pattern and edge conformance to all axioms.
+
+---
+
+## 1. Unique Identification
+- Rule: Every pattern node must have unique id, name, and description
+- Error: Duplicate id or name
+- Level: Critical
+
+## 2. Node Structure
+- Rule: Nodes must contain all required fields (id, name, description, axioms, version)
+- Error: Missing field
+- Level: Critical
+
+## 3. Relationship Types
+- Rule: Edges must use allowed types (DEPENDS_ON, COMPOSES, EXTENDS, VALIDATES, CONFLICTS_WITH)
+- Error: Unrecognized type
+- Level: Critical
+
+## 4. Semantic Versioning
+- Rule: Pattern version must match MAJOR.MINOR.PATCH
+- Error: Invalid version format
+- Level: Warning
+
+## 5. Migration Governance
+- Rule: Migrations must have clearly documented entry/exit criteria, rollback, version tagging
+- Error: Incomplete governance record
+- Level: Warning
+
+## 6. Temporal Constraints
+- Rule: Edges may have 'valid_from' and 'valid_until' in meta; handle expired edges accordingly
+- Error: Invalid, missing, or expired meta
+- Level: Warning
+
+## 7. Acyclicity (COMPOSES)
+- Rule: No cycles allowed for COMPOSES relationships
+- Error: Detected cycle
+- Level: Critical
+
+## 8. Constraint Consistency (EXTENDS)
+- Rule: EXTENDS relationships must preserve base pattern constraints
+- Error: Constraint mismatch
+- Level: Warning
+
+## 9. Relationship Symmetry (CONFLICTS_WITH)
+- Rule: Every CONFLICTS_WITH edge must have a reciprocal
+- Error: Asymmetry
+- Level: Warning
+
+## 10. Dependency Resolution (DEPENDS_ON)
+- Rule: Target node for DEPENDS_ON must exist in pattern set
+- Error: Broken reference
+- Level: Critical
+
+## 11. Validation Suite Exit Criteria
+- Rule: All critical checks must pass before node/edge can be committed
+- Error: Any critical error
+- Level: Blocking
+
+---
+
+**Sample Test Cases:**
+- Provide YAML/JSON pattern example covering edge-cases per rule
+
+**Coverage:**
+- Track in cycle-1-validation-coverage.md

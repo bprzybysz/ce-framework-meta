@@ -1,0 +1,15 @@
+{
+  "title": "Pattern Graph Node",
+  "description": "Schema for a pattern node in graph representation.",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "axioms": { "type": "array", "items": { "type": "string" } },
+    "version": { "type": "string" },
+    "relationships": { "type": "array", "items": { "type": "string" } },
+    "constraints": { "type": "array", "items": { "type": "string" } }
+  },
+  "required": ["id", "name", "axioms", "version"]
+}

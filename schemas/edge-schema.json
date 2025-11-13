@@ -1,0 +1,12 @@
+{
+  "title": "Pattern Graph Edge",
+  "description": "Schema for relationships between patterns in graph representation.",
+  "type": "object",
+  "properties": {
+    "source": { "type": "string" },
+    "target": { "type": "string" },
+    "type": { "type": "string", "enum": ["DEPENDS_ON", "COMPOSES", "EXTENDS", "VALIDATES", "CONFLICTS_WITH"] },
+    "meta": { "type": "object" }
+  },
+  "required": ["source", "target", "type"]
+}

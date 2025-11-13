@@ -1,0 +1,12 @@
+# Pattern Axioms v1
+# Use these axioms to guide construction and serialization of patterns in the new graph-based framework.
+
+axioms:
+  - Every pattern must have a unique ID, name, description.
+  - Patterns are serializable as nodes with axiom and constraint metadata.
+  - Patterns explicitly define relationships: DEPENDS_ON, COMPOSES, EXTENDS, VALIDATES, CONFLICTS_WITH.
+  - Patterns can be versioned and reflexively migrated.
+  - Relationships and constraints are validated on each refinement cycle.
+  - Validation rules for patterns must be documented and versioned.
+  - Meta information (not implementation) must be isolated in this repo.
+  - Serialization of patterns follows schemas in /schemas/.

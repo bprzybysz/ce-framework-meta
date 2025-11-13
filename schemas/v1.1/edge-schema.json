@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/bprzybysz/ce-framework-meta/schemas/v1.1/edge-schema.json",
+  "title": "Pattern Graph Edge",
+  "description": "Schema for relationships between patterns in CE framework graph (v1.1)",
+  "type": "object",
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+\\.[a-z0-9-]+$",
+      "description": "Source pattern identifier"
+    },
+    "target_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+\\.[a-z0-9-]+$",
+      "description": "Target pattern identifier"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["DEPENDS_ON", "COMPOSES", "EXTENDS", "VALIDATES", "CONFLICTS_WITH"],
+      "description": "Relationship type"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "strength": {
+          "type": "string",
+          "enum": ["required", "optional", "recommended"],
+          "description": "Dependency strength for DEPENDS_ON edges"
+        },
+        "order": {
+          "type": "integer",
+          "description": "Application order for COMPOSES edges"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Explanation for CONFLICTS_WITH edges"
+        },
+        "validation_scope": {
+          "type": "string",
+          "enum": ["structural", "semantic", "quality"],
+          "description": "Scope for VALIDATES edges"
+        }
+      }
+    },
+    "version_constraints": {
+      "type": "object",
+      "properties": {
+        "min_version": {"type": "string"},
+        "max_version": {"type": "string"},
+        "compatible_versions": {"type": "array", "items": {"type": "string"}}
+      },
+      "description": "Version compatibility constraints"
+    }
+  },
+  "required": ["source_id", "target_id", "type"]
+}

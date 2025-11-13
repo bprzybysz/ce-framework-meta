@@ -1,0 +1,40 @@
+id: "behavioral.observer-pattern"
+name: "observer-pattern"
+description: "Defines one-to-many dependency between objects where state changes in one object (subject) automatically notify and update dependent objects (observers). Promotes loose coupling by allowing subjects and observers to interact without tight binding. Fundamental pattern for event-driven architectures and reactive systems."
+version: "1.0.0"
+category: "behavioral"
+
+axioms:
+  - "UNIQUE_IDENTITY"
+  - "SCHEMA_COMPLIANCE"
+  - "EXPLICIT_DEPENDENCIES"
+  - "COMPOSABLE_UNITS"
+  - "EXTENSION_POINTS"
+
+relationships:
+  - target_id: "behavioral.event-emitter"
+    type: "COMPOSES"
+    metadata:
+      order: 1
+      
+  - target_id: "structural.singleton-pattern"
+    type: "CONFLICTS_WITH"
+    metadata:
+      reason: "Singleton subjects prevent multiple independent observer graphs"
+
+constraints:
+  - type: "structural"
+    description: "Must define attach/detach/notify interface"
+    rule: "interface.has_methods(['attach', 'detach', 'notify'])"
+    
+  - type: "semantic"
+    description: "Notification order should not affect correctness"
+    rule: "behavior.order_independent_notifications()"
+
+metadata:
+  authors: ["Gang of Four"]
+  created_at: "2025-11-13T03:50:00Z"
+  updated_at: "2025-11-13T03:50:00Z"
+  lifecycle_state: "APPROVED"
+  owners: ["bprzybysz"]
+  tags: ["event-driven", "reactive", "publish-subscribe", "decoupling"]

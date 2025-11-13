@@ -1,0 +1,91 @@
+# Pattern Relationship Ontology
+version: "1.1.0"
+
+relationship_types:
+  DEPENDS_ON:
+    description: "Source pattern requires target pattern to function correctly"
+    directionality: "directed"
+    transitivity: "transitive"
+    properties:
+      - "Forms DAG (acyclic)"
+      - "Enables dependency resolution"
+      - "Supports topological sorting"
+    metadata_fields:
+      - "strength: required|optional|recommended"
+    examples:
+      - "repository-pattern DEPENDS_ON database-abstraction"
+      - "facade-pattern DEPENDS_ON subsystem-interfaces"
+      
+  COMPOSES:
+    description: "Source pattern is built from or includes target pattern"
+    directionality: "directed"
+    transitivity: "non-transitive"
+    properties:
+      - "Supports hierarchical composition"
+      - "Order may matter (metadata.order)"
+      - "Enables pattern libraries"
+    metadata_fields:
+      - "order: integer (application sequence)"
+    examples:
+      - "mvc-pattern COMPOSES model-pattern"
+      - "mvc-pattern COMPOSES view-pattern"
+      - "mvc-pattern COMPOSES controller-pattern"
+      
+  EXTENDS:
+    description: "Source pattern adds functionality to target pattern"
+    directionality: "directed"
+    transitivity: "non-transitive"
+    properties:
+      - "Target must define extension points"
+      - "Preserves target semantics"
+      - "Enables framework customization"
+    metadata_fields:
+      - "extension_point: string (what is being extended)"
+    examples:
+      - "cached-repository EXTENDS repository-pattern"
+      - "async-observer EXTENDS observer-pattern"
+      
+  VALIDATES:
+    description: "Source pattern provides validation for target pattern"
+    directionality: "directed"
+    transitivity: "non-transitive"
+    properties:
+      - "Enforces constraints"
+      - "Can be structural, semantic, or quality-focused"
+      - "Applied during pattern lifecycle transitions"
+    metadata_fields:
+      - "validation_scope: structural|semantic|quality"
+    examples:
+      - "schema-validator VALIDATES data-model"
+      - "contract-tester VALIDATES api-interface"
+      
+  CONFLICTS_WITH:
+    description: "Source and target patterns are mutually exclusive"
+    directionality: "bidirectional (symmetric)"
+    transitivity: "non-transitive"
+    properties:
+      - "Prevents invalid combinations"
+      - "Must provide reason in metadata"
+      - "Checked during composition validation"
+    metadata_fields:
+      - "reason: string (why conflict exists)"
+    examples:
+      - "singleton-pattern CONFLICTS_WITH prototype-pattern"
+      - "optimistic-locking CONFLICTS_WITH pessimistic-locking"
+
+derived_queries:
+  transitive_dependencies:
+    description: "Find all transitive dependencies of a pattern"
+    algorithm: "DFS/BFS traversal of DEPENDS_ON edges"
+    
+  composition_tree:
+    description: "Build hierarchical tree of pattern compositions"
+    algorithm: "Tree construction from COMPOSES edges with order preservation"
+    
+  conflict_graph:
+    description: "Identify all conflicting pattern pairs in a set"
+    algorithm: "Graph traversal of CONFLICTS_WITH edges (bidirectional)"
+    
+  extension_chains:
+    description: "Find all extensions of a base pattern"
+    algorithm: "Reverse traversal of EXTENDS edges"

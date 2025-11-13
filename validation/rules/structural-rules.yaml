@@ -1,0 +1,44 @@
+# Structural Validation Rules for Pattern Graph
+version: "1.1.0"
+
+rules:
+  - id: "STR-001"
+    name: "unique-pattern-ids"
+    description: "All pattern IDs must be globally unique across the graph"
+    severity: "error"
+    validator: "graph.check_unique_ids()"
+    
+  - id: "STR-002"
+    name: "acyclic-dependencies"
+    description: "DEPENDS_ON edges must not create cycles"
+    severity: "error"
+    validator: "graph.check_dag('DEPENDS_ON')"
+    
+  - id: "STR-003"
+    name: "valid-edge-targets"
+    description: "All edge target_ids must reference existing patterns"
+    severity: "error"
+    validator: "graph.validate_edge_targets()"
+    
+  - id: "STR-004"
+    name: "schema-compliance"
+    description: "All patterns must validate against versioned JSON schema"
+    severity: "error"
+    validator: "schema.validate_pattern(pattern, schema_version)"
+    
+  - id: "STR-005"
+    name: "no-orphan-nodes"
+    description: "Patterns should have at least one incoming or outgoing edge"
+    severity: "warning"
+    validator: "graph.check_connectivity()"
+    
+  - id: "STR-006"
+    name: "lifecycle-progression"
+    description: "Pattern lifecycle state transitions must follow allowed paths"
+    severity: "error"
+    allowed_transitions:
+      DRAFT: ["REVIEW", "DEPRECATED"]
+      REVIEW: ["APPROVED", "DRAFT", "DEPRECATED"]
+      APPROVED: ["DEPRECATED"]
+      DEPRECATED: []
+    validator: "lifecycle.validate_transition(old_state, new_state)"

@@ -1,0 +1,104 @@
+# Pattern Axioms v1.1 - Refinement Cycle 1
+# Foundational axioms for graph-based pattern representation and serialization
+
+version: "1.1.0"
+date: "2025-11-13"
+
+core_axioms:
+  identity:
+    - axiom: "UNIQUE_IDENTITY"
+      description: "Every pattern must have a globally unique identifier (UUID or namespaced string)"
+      rationale: "Enables unambiguous pattern references across distributed systems and versions"
+      
+    - axiom: "SEMANTIC_NAMING"
+      description: "Pattern names must be human-readable, semantically meaningful, and follow kebab-case convention"
+      rationale: "Improves discoverability and understanding in catalog browsing"
+      
+    - axiom: "SELF_DESCRIBING"
+      description: "Every pattern includes a description field with purpose, use cases, and constraints"
+      rationale: "Enables autonomous pattern discovery and selection by AI agents"
+
+  serialization:
+    - axiom: "SCHEMA_COMPLIANCE"
+      description: "All patterns serialize to JSON/YAML conforming to versioned schemas in /schemas/"
+      rationale: "Ensures interoperability and validation across tools and implementations"
+      
+    - axiom: "BIDIRECTIONAL_MAPPING"
+      description: "Patterns support lossless serialization and deserialization (graph ↔ file)"
+      rationale: "Enables version control, review, and programmatic manipulation"
+      
+    - axiom: "METADATA_PRESERVATION"
+      description: "Serialization preserves all metadata: authorship, timestamps, versioning, lineage"
+      rationale: "Supports audit trails, governance, and pattern evolution tracking"
+
+  relationships:
+    - axiom: "EXPLICIT_DEPENDENCIES"
+      description: "Patterns declare all dependencies using typed edges: DEPENDS_ON, COMPOSES, EXTENDS, VALIDATES, CONFLICTS_WITH"
+      rationale: "Enables dependency resolution, conflict detection, and composition validation"
+      
+    - axiom: "ACYCLIC_DEPENDENCIES"
+      description: "DEPENDS_ON relationships must form a directed acyclic graph (DAG)"
+      rationale: "Prevents circular dependencies and enables topological ordering for application"
+      
+    - axiom: "TRANSITIVE_CLOSURE"
+      description: "Dependency resolution includes transitive dependencies (if A→B, B→C, then A→→C)"
+      rationale: "Ensures complete dependency sets for pattern instantiation"
+      
+    - axiom: "CONFLICT_EXPLICIT"
+      description: "Mutually exclusive patterns must declare CONFLICTS_WITH edges"
+      rationale: "Prevents invalid pattern combinations at validation time"
+
+  versioning:
+    - axiom: "SEMANTIC_VERSIONING"
+      description: "Patterns use semantic versioning (MAJOR.MINOR.PATCH) for evolution tracking"
+      rationale: "Communicates compatibility and enables automated migration strategies"
+      
+    - axiom: "IMMUTABLE_VERSIONS"
+      description: "Published pattern versions are immutable; changes require new version"
+      rationale: "Ensures reproducibility and prevents breaking changes to existing references"
+      
+    - axiom: "MIGRATION_PATHS"
+      description: "Breaking version changes (MAJOR) must include migration instructions or automated transforms"
+      rationale: "Enables consumers to upgrade without manual intervention"
+
+  validation:
+    - axiom: "VALIDATION_RULES"
+      description: "All patterns have associated validation rules (structural, semantic, quality)"
+      rationale: "Ensures pattern correctness before application and during evolution"
+      
+    - axiom: "COMPOSITIONAL_VALIDATION"
+      description: "Pattern compositions validate as a whole, not just individual patterns"
+      rationale: "Catches integration issues and emergent conflicts"
+      
+    - axiom: "FAIL_FAST"
+      description: "Validation failures prevent pattern application and provide actionable feedback"
+      rationale: "Reduces debugging time and prevents corrupt states"
+
+  governance:
+    - axiom: "LIFECYCLE_STATES"
+      description: "Patterns progress through states: DRAFT → REVIEW → APPROVED → DEPRECATED"
+      rationale: "Enforces quality gates and controlled evolution"
+      
+    - axiom: "OWNERSHIP_TRACKING"
+      description: "Every pattern has designated owners/maintainers for governance"
+      rationale: "Enables accountability and contact for questions/issues"
+      
+    - axiom: "META_SEPARATION"
+      description: "Pattern definitions (meta) are separated from implementations (concrete)"
+      rationale: "Allows multiple implementations and independent evolution of specification"
+
+  composability:
+    - axiom: "COMPOSABLE_UNITS"
+      description: "Patterns are designed as composable units that can be combined via COMPOSES edges"
+      rationale: "Enables building complex patterns from simpler, reusable components"
+      
+    - axiom: "EXTENSION_POINTS"
+      description: "Patterns can define extension points for customization via EXTENDS edges"
+      rationale: "Supports framework extension without forking"
+
+derived_principles:
+  - "Patterns form a knowledge graph navigable by relationship type"
+  - "Graph topology enables algorithmic pattern discovery and recommendation"
+  - "Validation ensures graph integrity at all times"
+  - "Versioning enables temporal queries (pattern state at time T)"
+  - "Separation of meta and implementation enables polyglot implementations"

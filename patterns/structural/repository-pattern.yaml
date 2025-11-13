@@ -1,0 +1,40 @@
+id: "structural.repository-pattern"
+name: "repository-pattern"
+description: "Mediates between domain and data mapping layers using a collection-like interface for accessing domain objects. Provides abstraction over data persistence, enabling domain logic to remain independent of data access details. Commonly used in layered architectures to separate business logic from data access code."
+version: "1.0.0"
+category: "structural"
+
+axioms:
+  - "UNIQUE_IDENTITY"
+  - "SCHEMA_COMPLIANCE"
+  - "EXPLICIT_DEPENDENCIES"
+  - "SEMANTIC_VERSIONING"
+  - "META_SEPARATION"
+
+relationships:
+  - target_id: "structural.data-mapper"
+    type: "DEPENDS_ON"
+    metadata:
+      strength: "required"
+      
+  - target_id: "behavioral.query-object"
+    type: "COMPOSES"
+    metadata:
+      order: 1
+
+constraints:
+  - type: "structural"
+    description: "Must define collection-like interface (add, remove, find)"
+    rule: "interface.has_methods(['add', 'remove', 'find'])"
+    
+  - type: "semantic"
+    description: "Should not expose underlying data access technology"
+    rule: "abstraction.no_leaky_implementation()"
+
+metadata:
+  authors: ["Martin Fowler", "Eric Evans"]
+  created_at: "2025-11-13T03:50:00Z"
+  updated_at: "2025-11-13T03:50:00Z"
+  lifecycle_state: "APPROVED"
+  owners: ["bprzybysz"]
+  tags: ["data-access", "persistence", "domain-driven-design", "layered-architecture"]

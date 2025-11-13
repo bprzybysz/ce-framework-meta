@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/bprzybysz/ce-framework-meta/schemas/v1.1/pattern-schema.json",
+  "title": "Pattern Graph Node",
+  "description": "Schema for a pattern node in CE framework graph representation (v1.1)",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+\\.[a-z0-9-]+$",
+      "description": "Globally unique pattern identifier (namespace.pattern-name)"
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Human-readable pattern name (kebab-case)"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Detailed description of pattern purpose, use cases, and constraints"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semantic version (MAJOR.MINOR.PATCH)"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["structural", "behavioral", "integration", "meta"],
+      "description": "Pattern category for organization"
+    },
+    "axioms": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "Axiom identifiers this pattern satisfies"
+      },
+      "minItems": 1
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/relationship"
+      },
+      "description": "Outgoing edges to other patterns"
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {"type": "string"},
+          "description": {"type": "string"},
+          "rule": {"type": "string"}
+        },
+        "required": ["type", "rule"]
+      },
+      "description": "Validation constraints for this pattern"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "authors": {"type": "array", "items": {"type": "string"}},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"},
+        "lifecycle_state": {
+          "type": "string",
+          "enum": ["DRAFT", "REVIEW", "APPROVED", "DEPRECATED"]
+        },
+        "owners": {"type": "array", "items": {"type": "string"}},
+        "tags": {"type": "array", "items": {"type": "string"}}
+      },
+      "required": ["authors", "created_at", "lifecycle_state", "owners"]
+    },
+    "migration": {
+      "type": "object",
+      "properties": {
+        "from_version": {"type": "string"},
+        "instructions": {"type": "string"},
+        "automated": {"type": "boolean"}
+      },
+      "description": "Migration information for version upgrades"
+    }
+  },
+  "required": ["id", "name", "description", "version", "category", "axioms", "metadata"],
+  "definitions": {
+    "relationship": {
+      "type": "object",
+      "properties": {
+        "target_id": {"type": "string"},
+        "type": {
+          "type": "string",
+          "enum": ["DEPENDS_ON", "COMPOSES", "EXTENDS", "VALIDATES", "CONFLICTS_WITH"]
+        },
+        "metadata": {"type": "object"}
+      },
+      "required": ["target_id", "type"]
+    }
+  }
+}

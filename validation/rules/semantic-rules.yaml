@@ -1,0 +1,39 @@
+# Semantic Validation Rules for Pattern Graph
+version: "1.1.0"
+
+rules:
+  - id: "SEM-001"
+    name: "dependency-satisfaction"
+    description: "All DEPENDS_ON relationships must be satisfied before pattern application"
+    severity: "error"
+    validator: "dependencies.check_satisfied(pattern, context)"
+    
+  - id: "SEM-002"
+    name: "no-conflicts"
+    description: "Applied patterns must not have CONFLICTS_WITH edges between them"
+    severity: "error"
+    validator: "conflicts.check_pattern_set(patterns)"
+    
+  - id: "SEM-003"
+    name: "composition-order"
+    description: "COMPOSES edges with order metadata must be applied in sequence"
+    severity: "error"
+    validator: "composition.validate_order(edges)"
+    
+  - id: "SEM-004"
+    name: "extension-compatibility"
+    description: "EXTENDS edges must target patterns with compatible extension points"
+    severity: "error"
+    validator: "extensions.validate_compatibility(source, target)"
+    
+  - id: "SEM-005"
+    name: "version-compatibility"
+    description: "Edge version constraints must be satisfied by target pattern versions"
+    severity: "error"
+    validator: "versioning.check_constraint(edge.version_constraints, target.version)"
+    
+  - id: "SEM-006"
+    name: "axiom-compliance"
+    description: "Pattern behavior must align with declared axioms"
+    severity: "warning"
+    validator: "axioms.verify_compliance(pattern)"

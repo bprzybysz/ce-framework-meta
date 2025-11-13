@@ -1,0 +1,64 @@
+# Global Constraints for Pattern Graph
+version: "1.1.0"
+
+global_constraints:
+  graph_integrity:
+    - constraint: "ALL_IDS_UNIQUE"
+      description: "No two patterns can share the same ID"
+      enforcement: "pre-commit validation"
+      
+    - constraint: "NO_DANGLING_EDGES"
+      description: "All edges must reference existing pattern IDs"
+      enforcement: "pre-commit validation"
+      
+    - constraint: "DAG_DEPENDENCIES"
+      description: "DEPENDS_ON edges form directed acyclic graph"
+      enforcement: "pre-commit validation"
+      
+  versioning:
+    - constraint: "IMMUTABLE_VERSIONS"
+      description: "Published versions cannot be modified, only deprecated"
+      enforcement: "git hooks + CI/CD"
+      
+    - constraint: "SEMVER_COMPLIANCE"
+      description: "All versions follow semantic versioning"
+      enforcement: "schema validation"
+      
+    - constraint: "MIGRATION_REQUIRED"
+      description: "MAJOR version bumps require migration instructions"
+      enforcement: "PR review checklist"
+      
+  lifecycle:
+    - constraint: "VALID_TRANSITIONS"
+      description: "State transitions follow lifecycle rules"
+      enforcement: "validation rules (STR-006)"
+      
+    - constraint: "APPROVED_IMMUTABLE"
+      description: "APPROVED patterns cannot return to DRAFT"
+      enforcement: "lifecycle validator"
+      
+  metadata:
+    - constraint: "REQUIRED_OWNERSHIP"
+      description: "Every pattern must have at least one owner"
+      enforcement: "schema validation"
+      
+    - constraint: "TIMESTAMP_MONOTONIC"
+      description: "updated_at must be >= created_at"
+      enforcement: "schema validation"
+      
+pattern_specific_constraints:
+  structural_patterns:
+    - "Must define at least one relationship"
+    - "Description must include structure diagram or reference"
+    
+  behavioral_patterns:
+    - "Must describe interaction flows"
+    - "Should include sequence diagram or state machine"
+    
+  integration_patterns:
+    - "Must specify integration points"
+    - "Should document communication protocols"
+    
+  meta_patterns:
+    - "Must compose at least 2 other patterns"
+    - "Should provide composition rationale"

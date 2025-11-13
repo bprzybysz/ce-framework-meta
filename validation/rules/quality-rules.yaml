@@ -1,0 +1,36 @@
+# Quality Validation Rules for Pattern Graph
+version: "1.1.0"
+
+rules:
+  - id: "QL-001"
+    name: "description-quality"
+    description: "Pattern descriptions should be comprehensive (>100 chars) and include use cases"
+    severity: "warning"
+    validator: "quality.check_description_length(pattern.description, min=100)"
+    
+  - id: "QL-002"
+    name: "reasonable-complexity"
+    description: "Pattern dependency depth should not exceed 5 levels"
+    severity: "warning"
+    max_depth: 5
+    validator: "quality.check_dependency_depth(pattern, max=5)"
+    
+  - id: "QL-003"
+    name: "metadata-completeness"
+    description: "Patterns should have complete metadata (authors, owners, tags)"
+    severity: "info"
+    validator: "quality.check_metadata_completeness(pattern.metadata)"
+    
+  - id: "QL-004"
+    name: "low-coupling"
+    description: "Patterns should have manageable coupling (< 10 outgoing edges)"
+    severity: "warning"
+    max_edges: 10
+    validator: "quality.check_coupling(pattern, max=10)"
+    
+  - id: "QL-005"
+    name: "reusability-score"
+    description: "Patterns should be sufficiently abstract for reuse (incoming COMPOSES edges)"
+    severity: "info"
+    min_reuse: 2
+    validator: "quality.calculate_reusability_score(pattern)"

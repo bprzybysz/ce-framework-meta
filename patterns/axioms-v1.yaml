@@ -1,4 +1,4 @@
-# Pattern Axioms v1
+# Pattern Axioms v1.1
 # Use these axioms to guide construction and serialization of patterns in the new graph-based framework.
 
 axioms:
@@ -10,3 +10,11 @@ axioms:
   - Validation rules for patterns must be documented and versioned.
   - Meta information (not implementation) must be isolated in this repo.
   - Serialization of patterns follows schemas in /schemas/.
+  - Patterns must follow **KISS** principle – capture only essential data needed for graph serialization.
+  - Patterns must respect **DRY** – shared metadata and constraints reused via references rather than duplication.
+  - Patterns must embody **SOLID** principles:
+      - Single Responsibility: one well-defined concern.
+      - Open/Closed: extensible via composition, not modification.
+      - Liskov Substitution: compatible replacements must preserve constraints.
+      - Interface Segregation: expose minimal required fields.
+      - Dependency Inversion: depend on abstractions (edge types), not concrete implementations.

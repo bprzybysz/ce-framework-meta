@@ -1,69 +1,48 @@
-# Validation Suite for Axioms
+# Validation Suite for Cycle 1 (ontology/validation.yaml)
+# Updated: 2025-11-13
+# Defines all rules for refined axioms in graph serialization
 
-**Date:** 2025-11-13
-**Purpose:** Define validation rules to ensure pattern and edge conformance to all axioms.
-
----
-
-## 1. Unique Identification
-- Rule: Every pattern node must have unique id, name, and description
-- Error: Duplicate id or name
-- Level: Critical
-
-## 2. Node Structure
-- Rule: Nodes must contain all required fields (id, name, description, axioms, version)
-- Error: Missing field
-- Level: Critical
-
-## 3. Relationship Types
-- Rule: Edges must use allowed types (DEPENDS_ON, COMPOSES, EXTENDS, VALIDATES, CONFLICTS_WITH)
-- Error: Unrecognized type
-- Level: Critical
-
-## 4. Semantic Versioning
-- Rule: Pattern version must match MAJOR.MINOR.PATCH
-- Error: Invalid version format
-- Level: Warning
-
-## 5. Migration Governance
-- Rule: Migrations must have clearly documented entry/exit criteria, rollback, version tagging
-- Error: Incomplete governance record
-- Level: Warning
-
-## 6. Temporal Constraints
-- Rule: Edges may have 'valid_from' and 'valid_until' in meta; handle expired edges accordingly
-- Error: Invalid, missing, or expired meta
-- Level: Warning
-
-## 7. Acyclicity (COMPOSES)
-- Rule: No cycles allowed for COMPOSES relationships
-- Error: Detected cycle
-- Level: Critical
-
-## 8. Constraint Consistency (EXTENDS)
-- Rule: EXTENDS relationships must preserve base pattern constraints
-- Error: Constraint mismatch
-- Level: Warning
-
-## 9. Relationship Symmetry (CONFLICTS_WITH)
-- Rule: Every CONFLICTS_WITH edge must have a reciprocal
-- Error: Asymmetry
-- Level: Warning
-
-## 10. Dependency Resolution (DEPENDS_ON)
-- Rule: Target node for DEPENDS_ON must exist in pattern set
-- Error: Broken reference
-- Level: Critical
-
-## 11. Validation Suite Exit Criteria
-- Rule: All critical checks must pass before node/edge can be committed
-- Error: Any critical error
-- Level: Blocking
-
----
-
-**Sample Test Cases:**
-- Provide YAML/JSON pattern example covering edge-cases per rule
-
-**Coverage:**
-- Track in cycle-1-validation-coverage.md
+unique_id:
+  description: Each pattern must have a unique id and name.
+  check: No duplicate id or name allowed.
+  error: Critical
+schema_conformance:
+  description: Patterns and edges must match all required fields in respective schemas.
+  check: Validate against pattern-schema.json, edge-schema.json.
+  error: Critical
+relationship_types:
+  description: Edge types must be one of [DEPENDS_ON, COMPOSES, EXTENDS, VALIDATES, CONFLICTS_WITH].
+  check: Enum match enforced.
+  error: Critical
+version_semver:
+  description: Pattern node version must be MAJOR.MINOR.PATCH.
+  check: Regex semver validation.
+  error: Warning
+migration_governance:
+  description: Every migration records entry/exit criteria, rollback, version.
+  check: Governance record must be complete in /migrations/
+  error: Warning
+temporal:
+  description: Edge.meta may have valid_from/valid_until; expired edges excluded from active graph but retained for audit.
+  check: If set, edge is active only if current date in range.
+  error: Warning
+composes_acyclic:
+  description: Graph traversal for COMPOSES edges must detect no cycles.
+  check: DFS/BFS to verify acyclicity.
+  error: Critical
+extends_consistency:
+  description: EXTENDS require base constraints to be met.
+  check: Validate inheritance of constraints.
+  error: Warning
+conflicts_symmetry:
+  description: Every CONFLICTS_WITH edge must have reciprocal.
+  check: Bidirectional edge existence.
+  error: Warning
+depends_resolution:
+  description: DEPENDS_ON relationships must refer to existing nodes.
+  check: Referential integrity in node set.
+  error: Critical
+exit_criteria:
+  description: Validation suite must pass all criticals before commit/release/tag.
+  check: Block on any critical error.
+  error: Blocking

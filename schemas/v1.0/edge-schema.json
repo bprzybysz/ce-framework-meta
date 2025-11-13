@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/bprzybysz/ce-framework-meta/schemas/v1.0/edge-schema.json",
+  "title": "CE Framework Edge Schema v1.0",
+  "description": "Schema for relationship edges in the CE Framework graph",
+  "type": "object",
+  "required": ["type", "description"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "DEPENDS_ON",
+        "COMPOSES",
+        "EXTENDS",
+        "CONFLICTS_WITH",
+        "VALIDATES",
+        "IMPLEMENTS",
+        "TRANSFORMS",
+        "USES"
+      ],
+      "description": "Edge type identifier"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable edge description"
+    },
+    "properties": {
+      "type": "object",
+      "description": "Edge-specific properties",
+      "properties": {
+        "transitive": {
+          "type": "boolean",
+          "description": "Whether this relationship is transitive"
+        },
+        "symmetric": {
+          "type": "boolean",
+          "description": "Whether this relationship is symmetric"
+        },
+        "strength": {
+          "type": "string",
+          "enum": ["weak", "moderate", "strong"],
+          "description": "Relationship strength"
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Whether this relationship is mandatory"
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Constraints for this edge type",
+      "properties": {
+        "allowed_source_categories": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "allowed_target_categories": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "max_instances": {
+          "type": "integer",
+          "description": "Maximum instances of this edge from a single node"
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "check_cycles": {"type": "boolean"},
+        "check_conflicts": {"type": "boolean"}
+      }
+    }
+  }
+}

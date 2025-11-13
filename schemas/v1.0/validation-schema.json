@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/bprzybysz/ce-framework-meta/schemas/v1.0/validation-schema.json",
+  "title": "CE Framework Validation Rule Schema v1.0",
+  "description": "Schema for validation rules",
+  "type": "object",
+  "required": ["id", "name", "type", "severity", "condition"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Unique rule identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable rule name"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["structural", "semantic", "quality"],
+      "description": "Validation type"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["error", "warning", "info"],
+      "description": "Validation severity level"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed rule description"
+    },
+    "condition": {
+      "type": "object",
+      "description": "Rule condition definition (implementation-specific)"
+    },
+    "action": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["fail", "warn", "report", "fix"]
+      },
+      "description": "Actions to take when rule is violated"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this rule is enabled"
+    }
+  }
+}

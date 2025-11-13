@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/bprzybysz/ce-framework-meta/schemas/v1.0/pattern-schema.json",
+  "title": "CE Framework Pattern Schema v1.0",
+  "description": "Schema for pattern nodes in the CE Framework graph",
+  "type": "object",
+  "required": ["id", "name", "category", "version", "structure"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Unique pattern identifier (kebab-case)"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 100,
+      "description": "Human-readable pattern name"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["structural", "behavioral", "integration", "meta"],
+      "description": "Pattern category"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of this pattern"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed pattern description"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "author": {"type": "string"},
+        "created": {"type": "string", "format": "date"},
+        "updated": {"type": "string", "format": "date"},
+        "tags": {"type": "array", "items": {"type": "string"}},
+        "status": {
+          "type": "string",
+          "enum": ["draft", "review", "approved", "deprecated"]
+        },
+        "migration_status": {
+          "type": "string",
+          "enum": ["not_started", "in_progress", "migrated", "validated"]
+        }
+      }
+    },
+    "structure": {
+      "type": "object",
+      "description": "Pattern structure definition",
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "type"],
+            "properties": {
+              "id": {"type": "string"},
+              "type": {"type": "string"},
+              "properties": {"type": "object"}
+            }
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["from", "to", "type"],
+            "properties": {
+              "from": {"type": "string"},
+              "to": {"type": "string"},
+              "type": {"type": "string"},
+              "properties": {"type": "object"}
+            }
+          }
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "List of validation rule IDs"
+        },
+        "constraints": {
+          "type": "object",
+          "description": "Pattern-specific constraints"
+        }
+      }
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {"type": "string"},
+          "description": {"type": "string"}
+        }
+      }
+    }
+  }
+}

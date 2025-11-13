@@ -1,28 +1,41 @@
 # Axiom-Schema Mapping
 
 **Date:** 2025-11-13
-**Purpose:** Explicit mapping of refined axioms to schema fields in pattern-schema.json and edge-schema.json
+**Status:** Initial mapping
+
+This document connects each refined axiom (from `patterns/axioms-v1.yaml`) to explicit schema fields in:
+- [`schemas/pattern-schema.json`](https://github.com/bprzybysz/ce-framework-meta/blob/main/schemas/pattern-schema.json)
+- [`schemas/edge-schema.json`](https://github.com/bprzybysz/ce-framework-meta/blob/main/schemas/edge-schema.json)
+
+---
 
 ## Mapping Table
 
-| Axiom                                                                                                                                                                                    | Pattern Node Field                  | Edge Field / Meta               | Validation Note                        |
-|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|----------------------------------|-----------------------------------------|
-| Every pattern must have a unique ID, name, description.                                                                                           | id, name, description               |                                  | Required, uniqueness enforced           |
-| Patterns are serializable as nodes with axiom and constraint metadata.                                                                            | axioms, constraints                 |                                  | Lists in node metadata                  |
-| Patterns explicitly define relationships: DEPENDS_ON, COMPOSES, EXTENDS, VALIDATES, CONFLICTS_WITH.                                               | relationships                       | type (enum)                      | Edge schema enforces relationship types |
-| Patterns must use semantic versioning (MAJOR.MINOR.PATCH).                                                 | version                             |                                  | Required format, validated              |
-| Pattern migrations must be reversible (forward/rollback).                                                   | version, migration                  |                                  | History documented by version           |
-| Meta information (not implementation) must be isolated in this repo.                                         | description, meta                   | meta (object)                    | Repo governance                         |
-| Serialization of patterns follows schemas in /schemas/.                                                     | all fields                          | all fields                       | Schema validation required              |
-| Patterns must follow KISS principle.                                                                        | id, name, axioms, constraints       |                                  | Minimal viable serialization            |
-| Patterns must respect DRY principle.                                                                        | constraints (references)            | meta (references)                | Duplicate data flagged                  |
-| Patterns must embody SOLID principles.                                                                      | name, constraints, relationships    | type, meta                       | Field design mapped to principles       |
-| Relationships can have temporal constraints (valid_from, valid_until).                                      |                                     | meta.valid_from, meta.valid_until| Temporal metadata required              |
-| COMPOSES relationships must form acyclic directed graph (no circular composition).                          | relationships                       | type: COMPOSES                   | Graph traversal for cycle check         |
-| EXTENDS relationships must preserve base pattern constraints.                                               | constraints, relationships          | type: EXTENDS                    | Constraint inheritance validated        |
-| CONFLICTS_WITH relationships must be symmetric (bidirectional).                                             | relationships                       | type: CONFLICTS_WITH              | Validator for symmetry                  |
-| DEPENDS_ON relationships must resolve to existing pattern nodes.                                            | relationships                       | type: DEPENDS_ON                  | Existential check enforced              |
-| Migration stages must define: scope, entry criteria, exit criteria, success metrics.                        | migration, version                  |                                  | Tracked in /migrations/                 |
-| Stage transitions require validation suite pass (zero critical errors).                                      |                                     |                                  | Exit criteria enforced                  |
-| Rollback procedures must be documented for each stage.                                                      | migration, version                  |                                  | Tracked in /migrations/                 |
-| Stage progress tracked in /migrations/ with version-tagged artifacts.                                       | migration, version                  |                                  | Artifacts linked to version             |
+| Axiom | Maps to Pattern Schema | Maps to Edge Schema | Notes |
+|-------|------------------------|---------------------|-------|
+| Unique ID, name, description | `id`, `name`, `description` | — | Make `description` required |
+| Node serialization, axiom/constraint metadata | `axioms`, `constraints` | — | Complete |
+| Explicit edge relationships (DEPENDS_ON, ...) | `relationships` | `type` | Enum in edge schema covers all |
+| KISS, DRY, SOLID principles | `name`, `constraints`, `relationships` | `meta` | Implementation best practices |
+| Meta info isolation | `axioms`, `constraints` | — | Docs + governance |
+| Serialization matches schemas | N/A (implicit) | N/A | Validation prerequisite |
+| Semantic versioning | `version` | — | Schema required field |
+| Migration reflexivity, stage governance | `version` | — | Documented in migrations |
+| Temporal edge constraints | — | `meta` (`valid_from`, `valid_until`) | Add examples in edge schema |
+| Acyclic COMPOSES, EXTENDS, etc. | `relationships` | `type`/`meta` | Validation rules |
+| Validation before commit | All fields | All fields | Validation logic in YAML |
+
+---
+
+### Required Schema Adjustments
+1. **Make `description` required** in `pattern-schema.json`
+2. **Add temporal fields (`valid_from`, `valid_until`)** to `edge-schema.json` examples and docs
+
+---
+
+## Next Steps
+- Update schemas as documented
+- Proceed to create validation rules
+- Document artifacts in progress log
+
+**Review:** All axioms map to explicit schema elements or validation practices; two identified for schema enhancement.

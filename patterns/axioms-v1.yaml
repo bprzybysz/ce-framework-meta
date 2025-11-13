@@ -1,20 +1,45 @@
-# Pattern Axioms v1.1
-# Use these axioms to guide construction and serialization of patterns in the new graph-based framework.
+# Pattern Axioms v1.2
+# Refined axiom set for graph-based context engineering
 
 axioms:
-  - Every pattern must have a unique ID, name, description.
-  - Patterns are serializable as nodes with axiom and constraint metadata.
-  - Patterns explicitly define relationships: DEPENDS_ON, COMPOSES, EXTENDS, VALIDATES, CONFLICTS_WITH.
-  - Patterns can be versioned and reflexively migrated.
-  - Relationships and constraints are validated on each refinement cycle.
-  - Validation rules for patterns must be documented and versioned.
-  - Meta information (not implementation) must be isolated in this repo.
-  - Serialization of patterns follows schemas in /schemas/.
-  - Patterns must follow **KISS** principle – capture only essential data needed for graph serialization.
-  - Patterns must respect **DRY** – shared metadata and constraints reused via references rather than duplication.
-  - Patterns must embody **SOLID** principles:
-      - Single Responsibility: one well-defined concern.
-      - Open/Closed: extensible via composition, not modification.
-      - Liskov Substitution: compatible replacements must preserve constraints.
-      - Interface Segregation: expose minimal required fields.
-      - Dependency Inversion: depend on abstractions (edge types), not concrete implementations.
+# --- CORE AXIOMS (KEEP) ---
+- Every pattern must have a unique ID, name, description.
+- Patterns are serializable as nodes with axiom and constraint metadata.
+- Patterns explicitly define relationships: DEPENDS_ON, COMPOSES, EXTENDS, VALIDATES, CONFLICTS_WITH.
+- Meta information (not implementation) must be isolated in this repo.
+- Serialization of patterns follows schemas in /schemas/.
+- Patterns must follow **KISS** principle – capture only essential data needed for graph serialization.
+- Patterns must respect **DRY** – shared metadata and constraints reused via references rather than duplication.
+- Patterns must embody **SOLID** principles:
+    - Single Responsibility: one well-defined concern.
+    - Open/Closed: extensible via composition, not modification.
+    - Liskov Substitution: compatible replacements must preserve constraints.
+    - Interface Segregation: expose minimal required fields.
+    - Dependency Inversion: depend on abstractions (edge types), not concrete implementations.
+# --- REVISED AXIOMS ---
+- Patterns must use semantic versioning (MAJOR.MINOR.PATCH).
+    - MAJOR: Breaking changes to structure, relationships, or constraints.
+    - MINOR: Backward-compatible additions (new fields, relationships).
+    - PATCH: Non-structural changes (documentation, metadata).
+    - Version must be included in pattern node metadata.
+- Pattern migrations must be reversible (forward/rollback).
+    - Migration stages define explicit entry/exit criteria.
+    - Each migration step must validate against current axioms.
+    - Migration failure triggers rollback to last stable version.
+- All patterns and edges must pass validation suite before commit.
+    - Validation includes: schema conformance, relationship integrity, constraint satisfaction.
+    - Validation errors must block serialization with actionable error messages.
+    - Validation rules versioned alongside patterns.
+# --- NEW AXIOMS ---
+- Relationships can have temporal constraints (valid_from, valid_until).
+    - Expired relationships remain in graph for historical analysis.
+    - Active relationships determined by temporal validity at query time.
+    - Temporal metadata stored in edge "meta" field.
+- COMPOSES relationships must form acyclic directed graph (no circular composition).
+    - EXTENDS relationships must preserve base pattern constraints.
+    - CONFLICTS_WITH relationships must be symmetric (bidirectional).
+    - DEPENDS_ON relationships must resolve to existing pattern nodes.
+- Migration stages must define: scope, entry criteria, exit criteria, success metrics.
+    - Stage transitions require validation suite pass (zero critical errors).
+    - Rollback procedures must be documented for each stage.
+    - Stage progress tracked in /migrations/ with version-tagged artifacts.
